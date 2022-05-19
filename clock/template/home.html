@@ -32,28 +32,29 @@
     <script>
         // 時間をリアルタイム表示する
         function updateClock() {
-            var now = new Date();
-            var hour = now.getHours();
-            var minute = now.getMinutes();
-            var second = now.getSeconds();
+            let now = new Date();
+            let hour = now.getHours();
+            let minute = now.getMinutes();
+            let second = now.getSeconds();
             if ( hour < 10 ) hour = "0" + hour;
             if ( minute < 10 ) minute = "0" + minute;
             if ( second < 10 ) second = "0" + second;
-            document.getElementById('myClock').innerHTML = hour+":"+minute+":"+second;
+            document.getElementById("myClock").innerHTML = hour + ":" + minute + ":" + second;
         }
-        setInterval("updateClock();", 1000);
 
-        $('#presence_button').on('click', function () {
-            $('#push_result').removeClass('alert-danger');
-            $('#push_result').removeClass('alert-info');
-            $('#push_result').hide();
+        setInterval(updateClock, 1000);
+
+        $("#presence_button").on("click", function () {
+            $("#push_result").removeClass("alert-danger");
+            $("#push_result").removeClass("alert-info");
+            $("#push_result").hide();
 
             $.ajax({
                 url: "{% url 'push' %}",
                 method: "POST",
-                dataType: 'json',
+                dataType: "json",
                 data: {
-                    push_type: 'presence'
+                    push_type: "presence"
                 },
                 beforeSend: function(xhr, settings) {
                     if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -65,28 +66,28 @@
             .done(function (data) {
                 console.log(data);
                 console.log(data.presence_time);
-                if (data.result == 'success'){
-                    $('#push_result').text('出勤しました： ' + data.presence_time);
-                    $('#push_result').addClass('alert-info');
-                    $('#push_result').show();
+                if (data.result == "success"){
+                    $("#push_result").text("出勤しました： " + data.presence_time);
+                    $("#push_result").addClass("alert-info");
+                    $("#push_result").show();
                 } else {
-                    $('#push_result').text('すでに打刻しています');
-                    $('#push_result').addClass('alert-danger');
-                    $('#push_result').show();
+                    $("#push_result").text("すでに打刻しています");
+                    $("#push_result").addClass("alert-danger");
+                    $("#push_result").show();
                 }
             });
         });
 
-        $('#leave_button').on('click', function () {
-            $('#push_result').removeClass('alert-danger');
-            $('#push_result').removeClass('alert-info');
-            $('#push_result').hide();
+        $("#leave_button").on("click", function () {
+            $("#push_result").removeClass("alert-danger");
+            $("#push_result").removeClass("alert-info");
+            $("#push_result").hide();
             $.ajax({
                 url: "{% url 'push' %}",
                 method: "POST",
-                dataType: 'json',
+                dataType: "json",
                 data: {
-                    push_type: 'leave'
+                    push_type: "leave"
                 },
                 beforeSend: function(xhr, settings) {
                     if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -97,19 +98,19 @@
             })
             .done(function (data) {
                 console.log(data);
-                if (data.result == 'success'){
-                    $('#push_result').text('退勤しました： ' + data.leave_time);
-                    $('#push_result').addClass('alert-info');
-                    $('#push_result').show();
+                if (data.result == "success"){
+                    $("#push_result").text("退勤しました： " + data.leave_time);
+                    $("#push_result").addClass("alert-info");
+                    $("#push_result").show();
                 }
-                else if (data.result == 'not_presented') {
-                    $('#push_result').text('まだ出勤打刻がされていません');
-                    $('#push_result').addClass('alert-danger');
-                    $('#push_result').show();
+                else if (data.result == "not_presented") {
+                    $("#push_result").text("まだ出勤打刻がされていません");
+                    $("#push_result").addClass("alert-danger");
+                    $("#push_result").show();
                 } else {
-                    $('#push_result').text('すでに退勤打刻されています');
-                    $('#push_result').addClass('alert-danger');
-                    $('#push_result').show();
+                    $("#push_result").text("すでに退勤打刻されています");
+                    $("#push_result").addClass("alert-danger");
+                    $("#push_result").show();
                 }
             });
         });
